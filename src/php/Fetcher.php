@@ -1,10 +1,10 @@
 <?php
-// This file contains the DAO class which will include common functions and fields needed to access data from the League of Legends API.
+// This file contains the Fetcher class which will include common functions and fields needed to access data from the League of Legends API.
 //	It will be extended by classes to grab specific pieces of data.
 
 require_once("Toolbox.php");
 
-abstract class DAO
+abstract class Fetcher
 {
 
 	protected $url;

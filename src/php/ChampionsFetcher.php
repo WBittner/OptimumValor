@@ -1,10 +1,10 @@
 <?php
-// This file contains the ChampionsDAO which will grab the list of champions from the riot API
+// This file contains the ChampionsFetcher which will grab the list of champions from the riot API
 
 require_once("Toolbox.php");
-require_once("DAO.php");
+require_once("Fetcher.php");
 
-class ChampionsDAO extends DAO
+class ChampionsFetcher extends Fetcher
 {
 
 	// Constructor
@@ -20,7 +20,7 @@ class ChampionsDAO extends DAO
 		$json = json_decode($result, true);
 
 		// Grab the champ list out of the result
-		$championList = $json["data"];
+		$championList = $json;//["data"];
 
 		return $championList;
 	}
