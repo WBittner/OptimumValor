@@ -1,17 +1,17 @@
 <?php
-// This file contains the ChampionsFetcher class which will grab the list of champions from the riot API
+// This file contains the MasteriesFetcher class which will grab the list of champions from the riot API
 
 require_once("Toolbox.php");
 require_once("Fetcher.php");
 
-class ChampionsFetcher extends Fetcher
+class MasteriesFetcher extends Fetcher
 {
 
 	// Constructor
 	function __construct()
 	{
 
-		$this->url = getStaticDataURL()."champion".getFormattedAPIKey();
+		$this->url = getStaticDataURL()."mastery".getFormattedAPIKey();
 	}
 	
 	protected function processData($result)
@@ -20,9 +20,9 @@ class ChampionsFetcher extends Fetcher
 		$json = json_decode($result, true);
 
 		// Grab the champ list out of the result
-		$championList = $json["data"];
+		$masteryList = $json["data"];
 
-		return $championList;
+		return $masteryList;
 	}
 
 
