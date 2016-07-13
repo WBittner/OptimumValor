@@ -7,19 +7,28 @@ require_once("Toolbox.php");
 abstract class DAO
 {
 
-	private $url;
+	protected $url;
 
 	// Constructor
 	function __construct()
 	{
 
 	}
+	
 
 	// Use URL to make API call then call process function to deal with results
 	public function getData()
 	{
+
+		// As we can't assure that all subclasses will define their url, we should probably handle the case when they don't
+		if(!isset($this->url))
+		{
+			$this->processError("URL is not set");
+			return null; //this will allow object instantiators to simply use isset to determine the call was attemped
+		}
+
 		// Get cURL resource
-		$curl = curl_init($this->$url);
+		$curl = curl_init($this->url);
 
 		// Return the result as a string rather than ouputting directly
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -38,18 +47,22 @@ abstract class DAO
 
 		if($err)// Error was found
 		{
-			$this->processError($err);
+			return ($this->processError($err));
 		}
 		else// No error was found
 		{
-			$this->processData();
+			return ($this->processData($result));
 		}
 
 	}
 
-	abstract protected function processData();
+	abstract protected function processData($result);
 
-	abstract protected function processError($error);
+	protected function processError($error)
+	{
+		return $error;
+	}
+
 
 
 }
