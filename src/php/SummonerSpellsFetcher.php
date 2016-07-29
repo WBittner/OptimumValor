@@ -10,8 +10,8 @@ class SummonerSpellsFetcher extends Fetcher
 	// Constructor
 	function __construct()
 	{
-
-		$this->url = getStaticDataURL()."summoner-spell".getFormattedAPIKey();
+		// Modes adds a "modes" : [] object in each summoner spell obj. [] is list of map names for availability
+		$this->url = getStaticDataURL()."summoner-spell?spellData=all".getFormattedAPIKey(true);
 	}
 	
 	protected function processData($result)
@@ -22,7 +22,41 @@ class SummonerSpellsFetcher extends Fetcher
 		// Grab the champ list out of the result
 		$summonerSpellsList = $json["data"];
 
-		return $summonerSpellsList;
+		//Grab an array of the modes
+		$allModes = array();
+
+		foreach($summonerSpellsList as $summonerKey)
+		{
+			$modes = $summonerKey["modes"];
+			foreach($modes as $mode)
+			{
+				if(!in_array($mode, $allModes))
+					$allModes[] = $mode;
+			}
+		}
+
+		//Make associative array with modes as keys
+		$associativeAllModes = array_fill_keys($allModes, array());
+
+		foreach($summonerSpellsList as $summonerKey => $summonerData )
+		{
+			$modes = $summonerData["modes"];
+			foreach($modes as $mode)
+			{
+				$associativeAllModes[$mode][] = $summonerData;
+			}
+		}
+
+		return $associativeAllModes;
+	}
+
+
+	// This function will return an array of the different "modes" for which at least one of the summoner spells may be chosen
+	public function getModes($summonerSpellsList = null)
+	{
+		$data = $this->GetData();
+
+		return array_keys($data);
 	}
 
 

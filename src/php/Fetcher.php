@@ -7,7 +7,8 @@ require_once("Toolbox.php");
 abstract class Fetcher
 {
 
-	protected $url;
+	protected $url; // The url for the api call - string
+	private $data; // The value of the function processData will be set here - associative array
 
 	// Constructor
 	function __construct()
@@ -19,6 +20,10 @@ abstract class Fetcher
 	// Use URL to make API call then call process function to deal with results
 	public function getData()
 	{
+
+		// Check if it's been created already - no need to make the API call twice
+		if(isset($this->data))
+			return $this->data;
 
 		// As we can't assure that all subclasses will define their url, we should probably handle the case when they don't
 		if(!isset($this->url))
@@ -51,18 +56,21 @@ abstract class Fetcher
 		}
 		else// No error was found
 		{
-			return ($this->processData($result));
+
+			$this->data = $this->processData($result);
+			return $this->data;
 		}
 
 	}
 
+	// Should only be called once per object by the getData function - processes the data into the sortable format we are expecting
 	abstract protected function processData($result);
 
+	// Called by getData in case of cURL error or if the URL is not set
 	protected function processError($error)
 	{
 		return $error;
 	}
-
 
 
 }

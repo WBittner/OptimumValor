@@ -9,10 +9,11 @@ function getAPIKey()
 }
 
 // This function returns my API key formatted to fit at the end of a URL
-function getFormattedAPIKey()
+function getFormattedAPIKey($appended = false)
 {
-	return "?api_key=".getAPIKey();
-
+	$formattedKey = $appended ? "&" : "?";
+	$formattedKey.="api_key=".getAPIKey();
+	return $formattedKey;
 }
 
 // Get the entirety of the config file as JSON.
@@ -51,6 +52,25 @@ function getStaticDataURL()
 function JSONPrettyPrint($json)
 {
 	echo "<pre>".json_encode($json, JSON_PRETTY_PRINT)."</pre>";
+}
+
+
+function GetXRandomElementsFromArrayYAndReturnZFields($numElements, $arr, $fieldsArr = "null")
+{
+	$retArr = array();
+	//Get Keys
+	$keys = array_rand($arr, $numElements);
+
+	for( $i = 0; $i < sizeof($keys); $i++)
+	{
+
+		$obj = array_slice($arr, $keys[$i], 1)[0];
+		if($fieldsArr !== "null")
+			$obj = array_intersect_key($obj, $fieldsArr);
+		array_push($retArr, $obj);
+	}
+
+	return $retArr;
 }
 
 ?>

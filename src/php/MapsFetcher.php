@@ -1,5 +1,5 @@
 <?php
-// This file contains the MapsFetcher class which will grab the list of champions from the riot API
+// This file contains the MapsFetcher class which will grab the list of maps from the riot API
 
 require_once("Toolbox.php");
 require_once("Fetcher.php");
